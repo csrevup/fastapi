@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 from api_functions import *
-import uvicorn
 
 
 app = FastAPI()
