@@ -7,17 +7,16 @@ def get_query(name):
     ##DB Connection
     try:
         conn = psycopg2.connect(connection_string)
-        print("Connected to database!")
         cur = conn.cursor()
         #sql="select description from items2 where name = " + name
         sql="select description from items2 where name = '"+name+"'"
         cur.execute(sql)
         item = cur.fetchone()
-        return item
+        if item==None:
+            return "empty"
+        else:
+            return item[0]
     
     except psycopg2.Error as e:
-        print("Error connecting to database:", e)
         exit()
 
-def test():
-    return "colacao"
