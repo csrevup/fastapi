@@ -13,4 +13,4 @@ async def root(name: str):
 
 @app.get("/testing")
 async def return_description(name: Name):
-    return request_body
+    return name
