@@ -6,4 +6,4 @@ app = FastAPI()
 
 @app.get("/first_test_api")
 async def root():
-    return {"greeting": test(), "message": "Welcome to FastAPI!"}
+    return {"greeting": get_query(), "message": "Welcome to FastAPI!"}
