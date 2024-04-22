@@ -1,9 +1,11 @@
 from fastapi import FastAPI
 from api_functions import *
+import uvicorn
 
 
 app = FastAPI()
 
-@app.get("/first_test_api")
-async def root():
-    return {"greeting": get_query(), "message": "Welcome to FastAPI!"}
+@app.get("/person_description")
+async def root(name: str):
+    return {"response": {name}}
+
