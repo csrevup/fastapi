@@ -6,5 +6,5 @@ app = FastAPI()
 
 @app.get("/person_description")
 async def root(name: str):
-    return {"response": name}
+    return {"response": get_query(name)}
 
