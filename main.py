@@ -13,4 +13,4 @@ async def root(name: str):
 
 @app.get("/testing")
 async def return_description(name: Name):
-    return name.name
+    return {"description":get_query(name.name)}
