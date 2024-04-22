@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from functions import *
+from api_functions import *
 
 
 app = FastAPI()
