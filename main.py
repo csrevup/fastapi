@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 from api_functions import *
+from pydantic import BaseModel
 
+class Name(BaseModel):
+    name: str
 
 app = FastAPI()
 
@@ -9,5 +12,5 @@ async def root(name: str):
     return {"response": get_query(name)}
 
 @app.get("/testing")
-async def root(request_body: dict = Body(...)):
+async def return_description(name: Name):
     return request_body
