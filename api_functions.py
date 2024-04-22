@@ -13,7 +13,7 @@ def get_query():
         sql="select description from items2 where name = 'Pau'"
         cur.execute(sql)
         item = cur.fetchone()
-        print(item)
+        return item
     
     except psycopg2.Error as e:
         print("Error connecting to database:", e)
