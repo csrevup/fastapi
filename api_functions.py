@@ -18,3 +18,5 @@ def get_query(name):
         print("Error connecting to database:", e)
         exit()
 
+def test():
+    return "colacao"
