@@ -8,7 +8,6 @@ def get_query(name):
     try:
         conn = psycopg2.connect(connection_string)
         cur = conn.cursor()
-        #sql="select description from items2 where name = " + name
         sql="select description from items2 where name = '"+name+"'"
         cur.execute(sql)
         item = cur.fetchone()
