@@ -11,6 +11,12 @@ security = HTTPBearer()
 class Name(BaseModel):
     name: str
 
+class CarPartRequest(BaseModel):
+    piece_name: str
+    car_brand: str
+    car_model: str
+    car_year: int
+
 def verify_token(credentials: HTTPAuthorizationCredentials):
     if credentials:
         token = credentials.credentials
@@ -35,7 +41,10 @@ async def return_description(name: Name, token: HTTPAuthorizationCredentials = D
     return {"description": get_query(name.name)}
 
 
-@app.get("/piece_details")
-async def return_description(name: Name, token: HTTPAuthorizationCredentials = Depends(security)):
-    verify_token(token)  # Verify token before processing
-    return {"description": get_query(name.name)}
+@app.get("/car_part_details")
+async def submit_car_part(request_data: CarPartRequest, token: HTTPAuthorizationCredentials = Depends(security)):
+    verify_token(token)
+    return {"message": CarPartRequest.piece_name + CarPartRequest.car_brand}    
+
+
+
