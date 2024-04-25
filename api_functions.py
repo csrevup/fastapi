@@ -3,7 +3,7 @@ import os
 
 ##Connection to DB
 connection_string = "postgresql://postgres:PzDnyALSXLNhGLazCwgxffGjIPNoxHAQ@monorail.proxy.rlwy.net:19847/railway"
-connection_2=os.environ.get('DATABASE_URL')
+connection_2=os.environ.get('testing_db')
 
 def get_query(name):
     ##DB Connection
