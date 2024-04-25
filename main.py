@@ -17,6 +17,8 @@ class CarPartRequest(BaseModel):
     car_model: str
     car_year: str
 
+
+##Function token validation
 def verify_token(credentials: HTTPAuthorizationCredentials):
     if credentials:
         token = credentials.credentials
@@ -30,6 +32,10 @@ def verify_token(credentials: HTTPAuthorizationCredentials):
         status_code=status.HTTP_401_UNAUTHORIZED, detail="Authorization required"
     )
 
+
+
+
+##API endpoints
 @app.get("/person_description")
 async def root(name: str, token: HTTPAuthorizationCredentials = Depends(security)):
     verify_token(token)  # Verify token before processing
@@ -44,7 +50,7 @@ async def return_description(name: Name, token: HTTPAuthorizationCredentials = D
 @app.get("/car_part_details")
 async def submit_car_part(piece_details: CarPartRequest, token: HTTPAuthorizationCredentials = Depends(security)):
     verify_token(token)
-    return {"detalles": "Hola"+piece_details.piece_name}
+    return {"detalles": piece_sku(piece_details.piece_name,piece_details.car_brand,piece_details.car_model,piece_details.car_year)}
 
 
 

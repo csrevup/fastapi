@@ -3,6 +3,7 @@ import os
 
 ##Connection to DB
 connection_string=os.environ.get('testing_db')
+connection_string_bonaparte=os.environ.get('bonparte_db')
 
 def get_query(name):
     ##DB Connection
@@ -13,6 +14,19 @@ def get_query(name):
                 cur.execute(sql, (name,))
                 item = cur.fetchone()
                 return item[0] if item else "No item found."
+    except psycopg2.Error as e:
+        return f"Database error: {e}"
+
+
+
+def piece_sku(piece_name,car_brand,car_model,car_year):
+     try:
+        with psycopg2.connect(connection_string_bonaparte) as conn:
+            with conn.cursor() as cur:
+                sql = "SELECT dai FROM vehicle_parts WHERE brand_idf = "+car_brand+" and model_idf="+car_model+" and year=2021 and line="+piece_name
+                ##cur.execute(sql, (name,))
+                ##item = cur.fetchone()
+                return sql
     except psycopg2.Error as e:
         return f"Database error: {e}"
 
