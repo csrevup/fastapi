@@ -1,7 +1,9 @@
 import psycopg2
+import os
 
 ##Connection to DB
 connection_string = "postgresql://postgres:PzDnyALSXLNhGLazCwgxffGjIPNoxHAQ@monorail.proxy.rlwy.net:19847/railway"
+connection_2=os.environ.get('DATABASE_URL')
 
 def get_query(name):
     ##DB Connection
@@ -12,7 +14,7 @@ def get_query(name):
         cur.execute(sql)
         item = cur.fetchone()
         if item==None:
-            return "empty"
+            return connection_2
         else:
             return item[0]
     
