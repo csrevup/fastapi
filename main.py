@@ -15,7 +15,7 @@ class CarPartRequest(BaseModel):
     piece_name: str
     car_brand: str
     car_model: str
-    car_year: int
+    car_year: str
 
 def verify_token(credentials: HTTPAuthorizationCredentials):
     if credentials:
@@ -44,7 +44,7 @@ async def return_description(name: Name, token: HTTPAuthorizationCredentials = D
 @app.get("/car_part_details")
 async def submit_car_part(request_data: CarPartRequest, token: HTTPAuthorizationCredentials = Depends(security)):
     verify_token(token)
-    return {"message": CarPartRequest.piece_name + CarPartRequest.car_brand}    
+    return {"message": request_data.piece_name + request_data.car_brand}    
 
 
 
