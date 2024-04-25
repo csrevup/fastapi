@@ -33,3 +33,9 @@ async def root(name: str, token: HTTPAuthorizationCredentials = Depends(security
 async def return_description(name: Name, token: HTTPAuthorizationCredentials = Depends(security)):
     verify_token(token)  # Verify token before processing
     return {"description": get_query(name.name)}
+
+
+@app.get("/piece_details")
+async def return_description(name: Name, token: HTTPAuthorizationCredentials = Depends(security)):
+    verify_token(token)  # Verify token before processing
+    return {"description": get_query(name.name)}
