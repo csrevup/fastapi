@@ -42,9 +42,9 @@ async def return_description(name: Name, token: HTTPAuthorizationCredentials = D
 
 
 @app.get("/car_part_details")
-async def submit_car_part(request_data: CarPartRequest, token: HTTPAuthorizationCredentials = Depends(security)):
+async def submit_car_part(piece_details: CarPartRequest, token: HTTPAuthorizationCredentials = Depends(security)):
     verify_token(token)
-    return {"message": request_data.piece_name + request_data.car_brand}    
+    return {"detalles": "Hola"+piece_details.piece_name}
 
 
 
