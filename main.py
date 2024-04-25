@@ -51,7 +51,8 @@ async def return_description(name: Name, token: HTTPAuthorizationCredentials = D
 async def submit_car_part(piece_details: CarPartRequest, token: HTTPAuthorizationCredentials = Depends(security)):
     verify_token(token)
     ##return {piece_sku(piece_details.piece_name,piece_details.car_brand,piece_details.car_model,piece_details.car_year)}
-    return {"hola":piece_details.piece_name+piece_details.car_brand+piece_details.car_model}
+    test_var=sql = "select dai FROM vehicle_parts WHERE brand_idf = "+car_brand+" and model_idf="+car_model+" and year=2021 and line="+piece_name
+    return {"hola":test_var}
 
 
 
