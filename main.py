@@ -55,7 +55,7 @@ async def submit_car_part(piece_details: CarPartRequest, token: HTTPAuthorizatio
 
     test_var = "select dai FROM vehicle_parts WHERE brand_idf = "+piece_details.car_brand+" and model_idf="+piece_details.car_model+" and year=2021 and line="+piece_details.piece_name
     ##return {"hola":piece_sku(piece_details.piece_name,piece_details.car_brand,piece_details.car_model,piece_details.car_year)}
-    return {"hola":"testing"}
+    return {"hola":"test2"}
 
 
 
