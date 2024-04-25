@@ -2,8 +2,7 @@ import psycopg2
 import os
 
 ##Connection to DB
-connection_string = "postgresql://postgres:PzDnyALSXLNhGLazCwgxffGjIPNoxHAQ@monorail.proxy.rlwy.net:19847/railway"
-connection_2=os.environ.get('testing_db')
+connection_string=os.environ.get('testing_db')
 
 def get_query(name):
     ##DB Connection
@@ -14,7 +13,7 @@ def get_query(name):
         cur.execute(sql)
         item = cur.fetchone()
         if item==None:
-            return connection_2
+            return "error"
         else:
             return item[0]
     
