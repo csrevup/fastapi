@@ -5,7 +5,7 @@ from api_functions import get_query
 import os
 
 app = FastAPI()
-token=os.environ.get('access_token')
+token_api=os.environ.get('access_token')
 security = HTTPBearer()
 
 class Name(BaseModel):
@@ -14,7 +14,7 @@ class Name(BaseModel):
 def verify_token(credentials: HTTPAuthorizationCredentials):
     if credentials:
         token = credentials.credentials
-        if token == token:  # Replace with your method of validating the token
+        if token == token_api:  # Replace with your method of validating the token
             return True
         else:
             raise HTTPException(
