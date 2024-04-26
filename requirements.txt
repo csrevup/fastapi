@@ -5,5 +5,4 @@ pydantic
 python-jose
 pyjwt
 uvicorn
-json
 
