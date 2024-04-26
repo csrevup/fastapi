@@ -20,7 +20,9 @@ def get_query(name):
 
 
 def piece_sku(piece_name,car_brand,car_model,car_year):
-    sql = "select dai FROM vehicle_parts WHERE brand_idf = "+car_brand
-    return piece_name
+    column_name = "DAI"
+    table_name = "vehicle_parts"
+    query = 'select "{0}" from {1};'.format(column_name, table_name)
+    return query
 
 
