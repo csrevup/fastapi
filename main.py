@@ -50,7 +50,7 @@ async def return_description(name: Name, token: HTTPAuthorizationCredentials = D
 @app.get("/car_part_details")
 async def submit_car_part(piece_details: CarPartRequest, token: HTTPAuthorizationCredentials = Depends(security)):
     verify_token(token)
-    return {"hola":piece_sku(piece_details.piece_name,piece_details.car_brand,piece_details.car_model,piece_details.car_year)}
+    return {"response":piece_sku(piece_details.piece_name,piece_details.car_brand,piece_details.car_model,piece_details.car_year)}
 
 
 

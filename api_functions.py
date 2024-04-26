@@ -29,8 +29,11 @@ def piece_sku(piece_name, car_brand, car_model, car_year):
         with psycopg2.connect(connection_string_bonaparte) as conn:
             with conn.cursor() as cur:
                 cur.execute(query, (piece_name, car_brand, car_model, car_year))
-                item = cur.fetchone()
-                return item[0] if item else "No item found."
+                items = cur.fetchall()  # Fetch all rows from the query
+                if items:
+                    return [item[0] for item in items]
+                else:
+                    return "No items found."  # Return message if no items are found
     except psycopg2.Error as e:
         return f"Database error: {e}"
 
