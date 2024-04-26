@@ -28,10 +28,10 @@ def piece_sku(piece_name, car_brand, car_model, car_year):
     try:
         with psycopg2.connect(connection_string_bonaparte) as conn:
             with conn.cursor() as cur:
-                cur.execute(query, (piece_name, car_brand, car_model, car_year))
+                cur.execute(query, (piece_name + '%', car_brand, car_model, car_year))
                 items = cur.fetchall()  # Fetch all rows from the query
                 if items:
-                    return [item[0] for item in items]
+                    return [(item[0], item[1]) for item in items]
                 else:
                     return "No items found."  # Return message if no items are found
     except psycopg2.Error as e:
