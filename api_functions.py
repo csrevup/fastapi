@@ -19,19 +19,19 @@ def get_query(name):
 
 
 
-def piece_sku(piece_name,car_brand,car_model,car_year):
-    column_name = "DAI"
+def piece_sku(piece_name, car_brand, car_model, car_year):
+    column_name = "dai"  # Assuming you've confirmed it's always lowercase in your schema
     table_name = "vehicle_parts"
-    query = 'SELECT "{0}" FROM {1} WHERE line = \'{2}\' AND brand_idf = \'{3}\' AND model_idf = \'{4}\' AND year = {5};'.format(column_name, table_name, piece_name, car_brand, car_model, car_year)
-
+    # Prepare a parameterized query
+    query = f'SELECT "{column_name}" FROM {table_name} WHERE line = %s AND brand_idf = %s AND model_idf = %s AND year = %s;'
+    
     try:
         with psycopg2.connect(connection_string_bonaparte) as conn:
             with conn.cursor() as cur:
-                cur.execute(query)
+                cur.execute(query, (piece_name, car_brand, car_model, car_year))
                 item = cur.fetchone()
                 return item[0] if item else "No item found."
     except psycopg2.Error as e:
         return f"Database error: {e}"
-    #return query
 
 
