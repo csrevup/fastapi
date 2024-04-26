@@ -22,8 +22,16 @@ def get_query(name):
 def piece_sku(piece_name,car_brand,car_model,car_year):
     column_name = "DAI"
     table_name = "vehicle_parts"
-    ##query = 'select "{0}" from {1} where line= {2} and brand_idf={3} and model_idf={4} and year ={5};'.format(column_name, table_name,piece_name,car_brand,car_model,car_year)
     query = 'SELECT "{0}" FROM {1} WHERE line = \'{2}\' AND brand_idf = \'{3}\' AND model_idf = \'{4}\' AND year = {5};'.format(column_name, table_name, piece_name, car_brand, car_model, car_year)
-    return query
+
+     try:
+        with psycopg2.connect(connection_string_bonaparte) as conn:
+            with conn.cursor() as cur:
+                cur.execute(query)
+                item = cur.fetchone()
+                return item[0] if item else "No item found."
+    except psycopg2.Error as e:
+        return f"Database error: {e}"
+    #return query
 
 
