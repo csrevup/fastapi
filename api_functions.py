@@ -1,5 +1,6 @@
 import psycopg2
 import os
+import json
 
 ##Connection to DB
 connection_string=os.environ.get('testing_db')
@@ -31,9 +32,9 @@ def piece_sku(piece_name, car_brand, car_model, car_year):
                 cur.execute(query, (piece_name + '%', car_brand, car_model, car_year))
                 items = cur.fetchall()  # Fetch all rows from the query
                 if items:
-                    return [(item[0], item[1]) for item in items]
+                    return json.dumps([{"sku": item[0], "piece_name": item[1]} for item in items])
                 else:
-                    return "No items found."  # Return message if no items are found
+                    return json.dumps({"message": "No items found."})  # Return JSON message if no items are found
     except psycopg2.Error as e:
         return f"Database error: {e}"
 
