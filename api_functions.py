@@ -24,7 +24,7 @@ def piece_sku(piece_name,car_brand,car_model,car_year):
     table_name = "vehicle_parts"
     query = 'SELECT "{0}" FROM {1} WHERE line = \'{2}\' AND brand_idf = \'{3}\' AND model_idf = \'{4}\' AND year = {5};'.format(column_name, table_name, piece_name, car_brand, car_model, car_year)
 
-     try:
+    try:
         with psycopg2.connect(connection_string_bonaparte) as conn:
             with conn.cursor() as cur:
                 cur.execute(query)
