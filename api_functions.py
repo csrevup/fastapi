@@ -20,10 +20,10 @@ def get_query(name):
 
 
 def piece_sku(piece_name, car_brand, car_model, car_year):
-    column_name = "dai"  # Assuming you've confirmed it's always lowercase in your schema
+    column_names = "dai,application"  # Assuming you've confirmed it's always lowercase in your schema
     table_name = "vehicle_parts"
     # Prepare a parameterized query
-    query = f'SELECT "{column_name}" FROM {table_name} WHERE line = %s AND brand_idf = %s AND model_idf = %s AND year = %s;'
+    query = f'SELECT DISTINCT {column_names} FROM {table_name} WHERE application ILIKE %s AND brand_idf ILIKE %s AND model_idf ILIKE %s AND year = %s;'
     
     try:
         with psycopg2.connect(connection_string_bonaparte) as conn:
