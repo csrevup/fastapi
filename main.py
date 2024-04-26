@@ -42,7 +42,7 @@ def verify_token(credentials: HTTPAuthorizationCredentials):
     )
 
 
-@app.get("/car_part_details", response_model=Union[List[Part], Message, ErrorResponse])
+@app.get("/car_part_details")
 async def submit_car_part(piece_details: CarPartRequest, token: HTTPAuthorizationCredentials = Depends(security)):
     verify_token(token)
     return piece_sku(piece_details.piece_name,piece_details.car_brand,piece_details.car_model,piece_details.car_year)
