@@ -2,6 +2,7 @@ from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
 from api_functions import get_query,piece_sku
+from typing import Union, List
 import os
 
 app = FastAPI()
