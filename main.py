@@ -8,14 +8,22 @@ app = FastAPI()
 token_api=os.environ.get('access_token')
 security = HTTPBearer()
 
-class Name(BaseModel):
-    name: str
-
 class CarPartRequest(BaseModel):
     piece_name: str
     car_brand: str
     car_model: str
     car_year: str
+
+
+class Part(BaseModel):
+    sku: str
+    piece_name: str
+
+class Message(BaseModel):
+    message: str
+
+class ErrorResponse(BaseModel):
+    error: str
 
 
 ##Function token validation
@@ -33,21 +41,7 @@ def verify_token(credentials: HTTPAuthorizationCredentials):
     )
 
 
-
-
-##API endpoints
-@app.get("/person_description")
-async def root(name: str, token: HTTPAuthorizationCredentials = Depends(security)):
-    verify_token(token)  # Verify token before processing
-    return {"response": get_query(name)}
-
-@app.get("/testing")
-async def return_description(name: Name, token: HTTPAuthorizationCredentials = Depends(security)):
-    verify_token(token)  # Verify token before processing
-    return {"description": get_query(name.name)}
-
-
-@app.get("/car_part_details")
+@app.get("/car_part_details", response_model=Union[List[Part], Message, ErrorResponse])
 async def submit_car_part(piece_details: CarPartRequest, token: HTTPAuthorizationCredentials = Depends(security)):
     verify_token(token)
     return piece_sku(piece_details.piece_name,piece_details.car_brand,piece_details.car_model,piece_details.car_year)
