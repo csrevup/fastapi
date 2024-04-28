@@ -32,7 +32,7 @@ def car_part_sku(piece_name, car_brand, car_model, car_year):
                 cur.execute(query, (piece_name + '%', car_brand, car_model, car_year))
                 items = cur.fetchall()  # Fetch all rows from the query
                 if items:
-                     return [{"sku": item[0], "piece_name": item[1]} for item in items]
+                     return {"sku": item[0], "piece_name": item[1]} for item in items
                 else:
                     return {"message": "No items found."}  # Return JSON message if no items are found
     except psycopg2.Error as e:
@@ -58,7 +58,7 @@ def sku_details(sku_number):
                 # Execute second query
                 cur.execute(query_q2, (sku_number,))
                 additional_items = cur.fetchall()
-                additional_details = [{"brand": item[0], "model": item[1], "year": str(item[2])} for item in additional_items] if additional_items else []
+                additional_details = [{"brand": item[0], "model": item[1], "year": str(int(item[2]))} for item in additional_items] if additional_items else []
 
         # Combine results into a single JSON object
         response = {
