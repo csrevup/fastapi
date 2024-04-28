@@ -45,7 +45,7 @@ def sku_details(sku_number):
     table_name = "vehicle_parts"
     # Prepare a parameterized query
     query = f'SELECT DISTINCT {column_names} FROM {table_name} WHERE dai ILIKE %s;'
-     try:
+    try:
         with psycopg2.connect(connection_string_bonaparte) as conn:
             with conn.cursor() as cur:
                 cur.execute(query, (sku_number,))  # Notice the comma to make it a tuple
