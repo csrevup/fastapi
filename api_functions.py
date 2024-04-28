@@ -51,7 +51,7 @@ def sku_details(sku_number):
                 cur.execute(query, (sku_number,))  # Notice the comma to make it a tuple
                 items = cur.fetchall()  # Fetch all rows from the query
                 if items:
-                    return items
+                    return [{"sku": item[0], "piece_name": item[1], "oem": item[2], "part_name": item[3], "position": item[4]} for item in items]
                 else:
                     return {"message": "No items found."}  # Return JSON message if no items are found
     except psycopg2.Error as e:
