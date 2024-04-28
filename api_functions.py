@@ -45,13 +45,13 @@ def sku_details(sku_number):
     table_name = "vehicle_parts"
     # Prepare a parameterized query
     query = f'SELECT DISTINCT {column_names} FROM {table_name} WHERE dai ILIKE %s;'
-    try:
+     try:
         with psycopg2.connect(connection_string_bonaparte) as conn:
             with conn.cursor() as cur:
-                cur.execute(query, (sku_number))
+                cur.execute(query, (sku_number,))  # Notice the comma to make it a tuple
                 items = cur.fetchall()  # Fetch all rows from the query
                 if items:
-                     return items
+                    return items
                 else:
                     return {"message": "No items found."}  # Return JSON message if no items are found
     except psycopg2.Error as e:
