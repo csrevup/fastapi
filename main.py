@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
-from api_functions import get_query,piece_sku
+from api_functions import *
 from typing import Union, List
 import os
 
@@ -16,16 +16,8 @@ class CarPartRequest(BaseModel):
     car_year: str
 
 
-class Part(BaseModel):
-    sku: str
-    piece_name: str
-
-class Message(BaseModel):
-    message: str
-
-class ErrorResponse(BaseModel):
-    error: str
-
+class SkuRequest(BaseModel):
+    sku_number: str
 
 ##Function token validation
 def verify_token(credentials: HTTPAuthorizationCredentials):
@@ -42,10 +34,16 @@ def verify_token(credentials: HTTPAuthorizationCredentials):
     )
 
 
-@app.get("/car_part_details")
+@app.get("/car_part_sku")
 async def submit_car_part(piece_details: CarPartRequest, token: HTTPAuthorizationCredentials = Depends(security)):
     verify_token(token)
-    return piece_sku(piece_details.piece_name,piece_details.car_brand,piece_details.car_model,piece_details.car_year)
+    return car_part_sku(piece_details.piece_name,piece_details.car_brand,piece_details.car_model,piece_details.car_year)
+
+
+@app.get("/sku_details")
+async def submit_car_part(sku: SkuRequest, token: HTTPAuthorizationCredentials = Depends(security)):
+    verify_token(token)
+    return sku_details(sku.sku_number)
 
 
 

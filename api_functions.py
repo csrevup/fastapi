@@ -20,7 +20,7 @@ def get_query(name):
 
 
 
-def piece_sku(piece_name, car_brand, car_model, car_year):
+def car_part_sku(piece_name, car_brand, car_model, car_year):
     column_names = "dai,application"  # Assuming you've confirmed it's always lowercase in your schema
     table_name = "vehicle_parts"
     # Prepare a parameterized query
@@ -39,3 +39,10 @@ def piece_sku(piece_name, car_brand, car_model, car_year):
         return {"error": f"Database error: {e}"}
 
 
+
+def sku_details(sku_number):
+    column_names = "dai,application"  # Assuming you've confirmed it's always lowercase in your schema
+    table_name = "vehicle_parts"
+    # Prepare a parameterized query
+    ##query = f'SELECT DISTINCT {column_names} FROM {table_name} WHERE application ILIKE %s AND brand_idf ILIKE %s AND model_idf ILIKE %s AND year = %s;'
+    return sku_number
