@@ -41,8 +41,18 @@ def car_part_sku(piece_name, car_brand, car_model, car_year):
 
 
 def sku_details(sku_number):
-    column_names = "dai,application"  # Assuming you've confirmed it's always lowercase in your schema
+    column_names = "dai,application,oem,part_name,position"  # Assuming you've confirmed it's always lowercase in your schema
     table_name = "vehicle_parts"
     # Prepare a parameterized query
-    ##query = f'SELECT DISTINCT {column_names} FROM {table_name} WHERE application ILIKE %s AND brand_idf ILIKE %s AND model_idf ILIKE %s AND year = %s;'
-    return sku_number
+    query = f'SELECT DISTINCT {column_names} FROM {table_name} WHERE dai ILIKE %s;'
+    try:
+        with psycopg2.connect(connection_string_bonaparte) as conn:
+            with conn.cursor() as cur:
+                cur.execute(query, (sku_number))
+                items = cur.fetchall()  # Fetch all rows from the query
+                if items:
+                     return items
+                else:
+                    return {"message": "No items found."}  # Return JSON message if no items are found
+    except psycopg2.Error as e:
+        return {"error": f"Database error: {e}"}
