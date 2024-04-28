@@ -58,7 +58,7 @@ def sku_details(sku_number):
                 # Execute second query
                 cur.execute(query_q2, (sku_number,))
                 additional_items = cur.fetchall()
-                additional_details = [{"brand": item[0], "model": item[1], "year": item[2]} for item in additional_items] if additional_items else []
+                additional_details = [{"brand": item[0], "model": item[1], "year": str(item[2])} for item in additional_items] if additional_items else []
 
         # Combine results into a single JSON object
         response = {
