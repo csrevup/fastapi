@@ -41,18 +41,30 @@ def car_part_sku(piece_name, car_brand, car_model, car_year):
 
 
 def sku_details(sku_number):
-    column_names = "dai,application,oem,part_name,position"  # Assuming you've confirmed it's always lowercase in your schema
+    column_names_q1 = "dai,application,oem,part_name,position_name"
+    column_names_q2 = "brand_idf,model_idf,year"
     table_name = "vehicle_parts"
     # Prepare a parameterized query
-    query = f'SELECT DISTINCT {column_names} FROM {table_name} WHERE dai ILIKE %s;'
+    query_q1 = f'SELECT DISTINCT {column_names_q1} FROM {table_name} WHERE dai ILIKE %s;'
+    query_q2 = f'SELECT DISTINCT {column_names_q2} FROM {table_name} WHERE dai ILIKE %s;'
     try:
         with psycopg2.connect(connection_string_bonaparte) as conn:
             with conn.cursor() as cur:
-                cur.execute(query, (sku_number,))  # Notice the comma to make it a tuple
-                items = cur.fetchall()  # Fetch all rows from the query
-                if items:
-                    return [{"sku": item[0], "piece_name": item[1], "oem": item[2], "part_name": item[3], "position": item[4]} for item in items]
-                else:
-                    return {"message": "No items found."}  # Return JSON message if no items are found
+                # Execute first query
+                cur.execute(query_q1, (sku_number,))
+                items = cur.fetchall()
+                detailed_items = [{"sku": item[0], "piece_name": item[1], "oem": item[2], "part_name": item[3], "position": item[4]} for item in items] if items else []
+
+                # Execute second query
+                cur.execute(query_q2, (sku_number,))
+                additional_items = cur.fetchall()
+                additional_details = [{"brand": item[0], "model": item[1], "year": item[2]} for item in additional_items] if additional_items else []
+
+        # Combine results into a single JSON object
+        response = {
+            "parts_details": detailed_items,
+            "compatible_cars": additional_details
+        }
+        return response if response['parts_details'] or response['compatible_cars'] else {"message": "No items found."}
     except psycopg2.Error as e:
         return {"error": f"Database error: {e}"}
