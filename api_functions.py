@@ -18,6 +18,7 @@ def car_part_sku(piece_name, car_brand, car_model, car_year):
                 items = cur.fetchall()  # Fetch all rows from the query
                 if items:
                     result = [{"sku": item[0], "piece_name": item[1]} for item in items]
+                    Logger.log(result)
                     return {"skus": result}
                 else:
                     return {"message": "No items found."}  # Return JSON message if no items are found
@@ -31,7 +32,7 @@ def car_part_sku_2(piece_name, car_brand, car_model, car_year):
     # Prepare a parameterized query with fuzzy matching and ordering
     query = (f'SELECT DISTINCT {column_names},similarity(application, {piece_name}) FROM {table_name} '
              f'WHERE application % {piece_name} '
-             f'AND brand_idf ILIKE  {car_brand}'
+             f'AND brand_idf ILIKE  {car_brand} '
              f'AND model_idf ILIKE {car_model} '
              f'AND year = {car_year} '
              f'ORDER BY similarity(application, {piece_name}) DESC;')
