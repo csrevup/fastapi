@@ -1,9 +1,13 @@
 import psycopg2
 import os
 import json
+import boto3
 
 ##Connection to DB
 connection_string_bonaparte=os.environ.get('bonparte_db')
+aws_key_id=os.environ.get('aws_access')
+aws_key=os.environ.get('aws_key')
+aws_region='eu-north-1'
 
 def car_part_sku_exact(piece_name, car_brand, car_model, car_year):
     column_names = "dai,application"  # Assuming you've confirmed it's always lowercase in your schema
@@ -100,3 +104,11 @@ def sku_details(sku_number):
          return response
    except psycopg2.Error as e:
       return {"error": f"Database error: {e}"}
+
+
+
+def get_image_url(image_name):
+    s3 = boto3.client('s3', aws_access_key_id=aws_key_id, aws_secret_access_key=aws_key,region_name=aws_region)
+    return s3.generate_presigned_url('get_object', Params={'Bucket': 'bonaparte-items-pictures', 'Key': image_name}, ExpiresIn=3600)
+
+   

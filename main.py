@@ -19,6 +19,9 @@ class CarPartRequest(BaseModel):
 class SkuRequest(BaseModel):
     sku_number: str
 
+class ImageUrl(BaseModel):
+    image_name: str
+
 ##Function token validation
 def verify_token(credentials: HTTPAuthorizationCredentials):
     if credentials:
@@ -49,6 +52,11 @@ async def submit_car_part(piece_details: CarPartRequest, token: HTTPAuthorizatio
 async def submit_car_part(sku: SkuRequest, token: HTTPAuthorizationCredentials = Depends(security)):
     verify_token(token)
     return sku_details(sku.sku_number)
+
+@app.post("/image_url")
+async def get_url(image: ImageUrl, token: HTTPAuthorizationCredentials = Depends(security)):
+    verify_token(token)
+    return get_image_url(image.image_name)
 
 
 
