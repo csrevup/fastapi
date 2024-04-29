@@ -30,7 +30,7 @@ def car_part_sku_2(piece_name, car_brand, car_model, car_year):
     table_name = "vehicle_parts"
 
     # Prepare a parameterized query with fuzzy matching and ordering
-    query = (f"""SELECT DISTINCT {column_names},similarity(application, '{piece_name}') FROM {table_name} """
+    query = (f"""SELECT DISTINCT {column_names},similarity(application, '{piece_name}') as smu FROM {table_name} """
              f"""WHERE application % '{piece_name}' """
              f"""AND brand_idf ILIKE  '{car_brand}' """
              f"""AND model_idf ILIKE '{car_model}' """
@@ -48,7 +48,7 @@ def car_part_sku_2(piece_name, car_brand, car_model, car_year):
                 items = cur.fetchall()
 
                 if items:
-                    result = [{"sku": item[0], "piece_name": item[1]} for item in items]
+                    result = [{"sku": item[0], "piece_name": item[1], "similarity":item[2]} for item in items]
                     return {"skus": result}
                 else:
                     return {"message": "No items found."}
