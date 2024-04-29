@@ -18,7 +18,6 @@ def car_part_sku_exact(piece_name, car_brand, car_model, car_year):
                 items = cur.fetchall()  # Fetch all rows from the query
                 if items:
                     result = [{"sku": item[0], "piece_name": item[1]} for item in items]
-                    print(result)
                     return {"skus": result}
                 else:
                     return {"message": "No items found."}  # Return JSON message if no items are found
@@ -41,7 +40,6 @@ def car_part_sku_similar(piece_name, car_brand, car_model, car_year):
         with psycopg2.connect(connection_string_bonaparte) as conn:
             with conn.cursor() as cur:
                 cur.execute("CREATE EXTENSION IF NOT EXISTS pg_trgm;")
-                print("Debug Query:", query)
 
                 cur.execute(query)
                 items = cur.fetchall()
