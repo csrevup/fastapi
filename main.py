@@ -39,6 +39,11 @@ async def submit_car_part(piece_details: CarPartRequest, token: HTTPAuthorizatio
     verify_token(token)
     return car_part_sku(piece_details.piece_name,piece_details.car_brand,piece_details.car_model,piece_details.car_year)
 
+@app.get("/car_part_sku_2")
+async def submit_car_part(piece_details: CarPartRequest, token: HTTPAuthorizationCredentials = Depends(security)):
+    verify_token(token)
+    return car_part_sku_2(piece_details.piece_name,piece_details.car_brand,piece_details.car_model,piece_details.car_year)
+
 
 @app.get("/sku_details")
 async def submit_car_part(sku: SkuRequest, token: HTTPAuthorizationCredentials = Depends(security)):
