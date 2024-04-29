@@ -5,7 +5,7 @@ import json
 ##Connection to DB
 connection_string_bonaparte=os.environ.get('bonparte_db')
 
-def car_part_sku(piece_name, car_brand, car_model, car_year):
+def car_part_sku_exact(piece_name, car_brand, car_model, car_year):
     column_names = "dai,application"  # Assuming you've confirmed it's always lowercase in your schema
     table_name = "vehicle_parts"
     # Prepare a parameterized query
@@ -25,20 +25,19 @@ def car_part_sku(piece_name, car_brand, car_model, car_year):
     except psycopg2.Error as e:
         return {"error": f"Database error: {e}"}
 
-def car_part_sku_2(piece_name, car_brand, car_model, car_year):
-    column_names = "dai,application"
+def car_part_sku_similar(piece_name, car_brand, car_model, car_year):
+    column_names = "dai, application"
     table_name = "vehicle_parts"
 
-    # Prepare a parameterized query with fuzzy matching and ordering
-    query = (f"""SELECT DISTINCT {column_names},similarity(application, '{piece_name}') as smu FROM {table_name} """
-             f"""WHERE application % '{piece_name}' """
-             f"""AND brand_idf ILIKE  '{car_brand}' """
-             f"""AND model_idf ILIKE '{car_model}' """
-             f"""AND year = '{car_year}' """
-             f"""ORDER BY similarity(application, '{piece_name}') DESC;""")
+    # Single query fetching all items sorted by similarity
+    query = (f"""SELECT DISTINCT {column_names}, similarity(application, '{piece_name}') as smu 
+                  FROM {table_name} 
+                  WHERE brand_idf ILIKE '{car_brand}' 
+                  AND model_idf ILIKE '{car_model}' 
+                  AND year = '{car_year}' 
+                  ORDER BY similarity(application, '{piece_name}') DESC;""")
 
     try:
-        # Make a connection and execute the query
         with psycopg2.connect(connection_string_bonaparte) as conn:
             with conn.cursor() as cur:
                 cur.execute("CREATE EXTENSION IF NOT EXISTS pg_trgm;")
@@ -47,13 +46,21 @@ def car_part_sku_2(piece_name, car_brand, car_model, car_year):
                 cur.execute(query)
                 items = cur.fetchall()
 
-                if items:
-                    result = [{"sku": item[0], "piece_name": item[1], "similarity":item[2]} for item in items]
+                # Filter items with similarity of 30% or more
+                result = [{"sku": item[0], "piece_name": item[1], "similarity": item[2]} for item in items if item[2] >= 0.3]
+
+                if not result:
+                    # If no items meet the threshold, take the top 2 regardless
+                    result = [{"sku": item[0], "piece_name": item[1], "similarity": item[2]} for item in items[:2]]
+
+                if result:
                     return {"skus": result}
                 else:
                     return {"message": "No items found."}
+
     except psycopg2.Error as e:
         return {"error": f"Database error: {e}"}
+
 
 
 def sku_details(sku_number):

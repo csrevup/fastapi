@@ -34,15 +34,15 @@ def verify_token(credentials: HTTPAuthorizationCredentials):
     )
 
 
-@app.get("/car_part_sku")
+@app.get("/car_part_sku_exact")
 async def submit_car_part(piece_details: CarPartRequest, token: HTTPAuthorizationCredentials = Depends(security)):
     verify_token(token)
-    return car_part_sku(piece_details.piece_name,piece_details.car_brand,piece_details.car_model,piece_details.car_year)
+    return car_part_sku_exact(piece_details.piece_name,piece_details.car_brand,piece_details.car_model,piece_details.car_year)
 
-@app.get("/car_part_sku_2")
+@app.get("/car_part_sku_similar")
 async def submit_car_part(piece_details: CarPartRequest, token: HTTPAuthorizationCredentials = Depends(security)):
     verify_token(token)
-    return car_part_sku_2(piece_details.piece_name,piece_details.car_brand,piece_details.car_model,piece_details.car_year)
+    return car_part_sku_similar(piece_details.piece_name,piece_details.car_brand,piece_details.car_model,piece_details.car_year)
 
 
 @app.get("/sku_details")
