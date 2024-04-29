@@ -47,7 +47,7 @@ def car_part_sku_similar(piece_name, car_brand, car_model, car_year):
                 # Filter items with similarity of 30% or more
                 result = {"accuracy":"high","skus":[{"sku": item[0], "piece_name": item[1], "similarity": item[2]} for item in items if item[2] >= 0.3]}
 
-                if not result:
+                if not result["skus"]:
                     # If no items meet the threshold, take the top 2 regardless
                     result = {"accuracy":"low","skus":[{"sku": item[0], "piece_name": item[1], "similarity": item[2]} for item in items[:2]]}
 
