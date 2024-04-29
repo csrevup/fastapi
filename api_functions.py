@@ -29,12 +29,12 @@ def car_part_sku_2(piece_name, car_brand, car_model, car_year):
     table_name = "vehicle_parts"
 
     # Prepare a parameterized query with fuzzy matching and ordering
-    query = (f'SELECT DISTINCT {column_names},similarity({column_name}, '{piece_name}') FROM {table_name} '
-             f'WHERE application % {piece_name} '
+    query = (f'SELECT DISTINCT {column_names} FROM {table_name} '
+             f'WHERE application % %s '
              f'AND brand_idf ILIKE %s '
              f'AND model_idf ILIKE %s '
              f'AND year = %s '
-             f'ORDER BY 3 DESC;')
+             f'ORDER BY similarity(application, %s) DESC;')
 
     try:
         # Make a connection and execute the query
@@ -43,9 +43,13 @@ def car_part_sku_2(piece_name, car_brand, car_model, car_year):
                 cur.execute("CREATE EXTENSION IF NOT EXISTS pg_trgm;")
 
                 print("Query:", query)
-                print("Parameters:", (piece_name, car_brand, car_model, car_year))
+                print("Parameters:", (piece_name, car_brand, car_model, car_year, piece_name))
 
-                cur.execute(query, (piece_name, car_brand, car_model, car_year))
+                query_debug = query.replace("%s", "{}").format(*params)
+                print("Debug Query:", query_debug)
+
+
+                cur.execute(query, (piece_name, car_brand, car_model, car_year, piece_name))
                 items = cur.fetchall()
 
                 if items:
