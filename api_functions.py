@@ -51,7 +51,7 @@ def car_part_sku_similar(piece_name, car_brand, car_model, car_year):
                     # If no items meet the threshold, take the top 2 regardless
                     result = {"accuracy":"low","skus":[{"sku": item[0], "piece_name": item[1], "similarity": item[2]} for item in items if item[2] >= 0.1]}
 
-                if result:
+                if result["skus"]:
                     return result
                 else:
                     return {"accuracy": "No items found"}
