@@ -83,7 +83,6 @@ def sku_details(sku_number):
             items = cur.fetchall()
 
             if not items:
-               print("No items found.")
                return {"part_details": "No SKU found","compatible_cars":""}
 
             detailed_items = [{"sku": item[0], "piece_name": item[1], "oem": item[2], "part_name": item[3], "position": item[4], "similarity": item[5]} for item in items]
@@ -98,9 +97,6 @@ def sku_details(sku_number):
             "parts_details": detailed_items,
             "compatible_cars": additional_details,
          }
-
-         print(response)
          return response
    except psycopg2.Error as e:
-      print(f"Database error: {e}")
       return {"error": f"Database error: {e}"}
