@@ -44,6 +44,8 @@ def car_part_sku_2(piece_name, car_brand, car_model, car_year):
 
                 print("Query:", query)
                 print("Parameters:", (piece_name, car_brand, car_model, car_year, piece_name))
+                
+                params = (piece_name, car_brand, car_model, car_year, piece_name)
 
                 query_debug = query.replace("%s", "{}").format(*params)
                 print("Debug Query:", query_debug)
