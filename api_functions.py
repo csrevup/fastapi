@@ -34,14 +34,14 @@ def car_part_sku_2(piece_name, car_brand, car_model, car_year):
              f'AND brand_idf ILIKE %s '
              f'AND model_idf ILIKE %s '
              f'AND year = %s '
-             f'ORDER BY similarity(application, %s) DESC;')
+             f'ORDER BY 1 DESC;')
 
     try:
         # Make a connection and execute the query
         with psycopg2.connect(connection_string_bonaparte) as conn:
             with conn.cursor() as cur:
                 cur.execute("CREATE EXTENSION IF NOT EXISTS pg_trgm;")
-                cur.execute(query, (piece_name, car_brand, car_model, car_year, piece_name))
+                cur.execute(query, (piece_name, car_brand, car_model, car_year))
                 items = cur.fetchall()
 
                 if items:
