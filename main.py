@@ -45,7 +45,7 @@ async def submit_car_part(piece_details: CarPartRequest, token: HTTPAuthorizatio
     return car_part_sku_similar(piece_details.piece_name,piece_details.car_brand,piece_details.car_model,piece_details.car_year)
 
 
-@app.get("/sku_details")
+@app.post("/sku_details")
 async def submit_car_part(sku: SkuRequest, token: HTTPAuthorizationCredentials = Depends(security)):
     verify_token(token)
     return sku_details(sku.sku_number)
