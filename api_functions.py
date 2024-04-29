@@ -43,9 +43,9 @@ def car_part_sku_2(piece_name, car_brand, car_model, car_year):
                 cur.execute("CREATE EXTENSION IF NOT EXISTS pg_trgm;")
 
                 print("Query:", query)
-                print("Parameters:", (piece_name, car_brand, car_model, car_year, piece_name))
+                print("Parameters:", (piece_name, car_brand, car_model, car_year))
 
-                cur.execute(query, (piece_name, car_brand, car_model, car_year, piece_name))
+                cur.execute(query, (piece_name, car_brand, car_model, car_year))
                 items = cur.fetchall()
 
                 if items:
