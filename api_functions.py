@@ -30,12 +30,12 @@ def car_part_sku_2(piece_name, car_brand, car_model, car_year):
     table_name = "vehicle_parts"
 
     # Prepare a parameterized query with fuzzy matching and ordering
-    query = (f'SELECT DISTINCT {column_names},similarity(application, {piece_name}) FROM {table_name} '
-             f'WHERE application % {piece_name} '
-             f'AND brand_idf ILIKE  {car_brand} '
-             f'AND model_idf ILIKE {car_model} '
-             f'AND year = {car_year} '
-             f'ORDER BY similarity(application, {piece_name}) DESC;')
+    query = (f"""SELECT DISTINCT {column_names},similarity(application, '{piece_name}') FROM {table_name} """
+             f"""WHERE application % '{piece_name}' """
+             f"""AND brand_idf ILIKE  '{car_brand}' """
+             f"""AND model_idf ILIKE '{car_model}' """
+             f"""AND year = '{car_year}' """
+             f"""ORDER BY similarity(application, '{piece_name}') DESC;""")
 
     try:
         # Make a connection and execute the query
