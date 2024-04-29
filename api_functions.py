@@ -49,12 +49,12 @@ def car_part_sku_similar(piece_name, car_brand, car_model, car_year):
 
                 if not result["skus"]:
                     # If no items meet the threshold, take the top 2 regardless
-                    result = {"accuracy":"low","skus":[{"sku": item[0], "piece_name": item[1], "similarity": item[2]} for item in items[:2]]}
+                    result = {"accuracy":"low","skus":[{"sku": item[0], "piece_name": item[1], "similarity": item[2]} for item in items if item[2] >= 0.1]}
 
                 if result:
                     return result
                 else:
-                    return {"message": "No items found."}
+                    return {"accuracy": "No items found"}
 
     except psycopg2.Error as e:
         return {"error": f"Database error: {e}"}
