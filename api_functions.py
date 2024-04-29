@@ -45,14 +45,14 @@ def car_part_sku_similar(piece_name, car_brand, car_model, car_year):
                 items = cur.fetchall()
 
                 # Filter items with similarity of 30% or more
-                result = [{"sku": item[0], "piece_name": item[1], "similarity": item[2]} for item in items if item[2] >= 0.3]
+                result = {"accuracy":"high","skus":[{"sku": item[0], "piece_name": item[1], "similarity": item[2]} for item in items if item[2] >= 0.3]}
 
                 if not result:
                     # If no items meet the threshold, take the top 2 regardless
-                    result = [{"sku": item[0], "piece_name": item[1], "similarity": item[2]} for item in items[:2]]
+                    result = {"accuracy":"low","skus":[{"sku": item[0], "piece_name": item[1], "similarity": item[2]} for item in items[:2]]}
 
                 if result:
-                    return {"skus": result}
+                    return result
                 else:
                     return {"message": "No items found."}
 
