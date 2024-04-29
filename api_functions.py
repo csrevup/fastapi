@@ -109,6 +109,6 @@ def sku_details(sku_number):
 
 def get_image_url(image_name):
     s3 = boto3.client('s3', aws_access_key_id=aws_key_id, aws_secret_access_key=aws_key,region_name=aws_region)
-    return s3.generate_presigned_url('get_object', Params={'Bucket': 'bonaparte-items-pictures', 'Key': image_name}, ExpiresIn=3600)
+    return {"image_url":s3.generate_presigned_url('get_object', Params={'Bucket': 'bonaparte-items-pictures', 'Key': image_name}, ExpiresIn=3600)}
 
    
