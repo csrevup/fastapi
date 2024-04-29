@@ -62,30 +62,45 @@ def car_part_sku_similar(piece_name, car_brand, car_model, car_year):
 
 
 def sku_details(sku_number):
-    column_names_q1 = "dai,application,oem,part_name,position_name"
-    column_names_q2 = "brand_idf,model_idf,year"
-    table_name = "vehicle_parts"
-    # Prepare a parameterized query
-    query_q1 = f'SELECT DISTINCT {column_names_q1} FROM {table_name} WHERE dai ILIKE %s;'
-    query_q2 = f'SELECT DISTINCT {column_names_q2} FROM {table_name} WHERE dai ILIKE %s;'
-    try:
-        with psycopg2.connect(connection_string_bonaparte) as conn:
-            with conn.cursor() as cur:
-                # Execute first query
-                cur.execute(query_q1, (sku_number,))
-                items = cur.fetchall()
-                detailed_items = [{"sku": item[0], "piece_name": item[1], "oem": item[2], "part_name": item[3], "position": item[4]} for item in items] if items else []
+   column_names_q1 = "dai, application, oem, part_name, position_name"
+   table_name = "vehicle_parts"
 
-                # Execute second query
-                cur.execute(query_q2, (sku_number,))
-                additional_items = cur.fetchall()
-                additional_details = [{"brand": item[0], "model": item[1], "year": str(int(item[2]))} for item in additional_items] if additional_items else []
+   query_q1 = f"""
+   SELECT DISTINCT {column_names_q1}, similarity(dai, %s)
+   FROM {table_name}
+   WHERE similarity(dai, %s) >= 0.5
+   ORDER BY similarity(dai, %s) DESC
+   LIMIT 1;
+   """
 
-        # Combine results into a single JSON object
-        response = {
+   query_q2 = f"SELECT DISTINCT brand_idf, model_idf, year FROM {table_name} WHERE dai ILIKE %s;"
+
+   try:
+      with psycopg2.connect(dsn=connection_string_bonaparte) as conn:
+         with conn.cursor() as cur:
+            # Execute the first query
+            cur.execute(query_q1, (sku_number, sku_number, sku_number))
+            items = cur.fetchall()
+
+            if not items:
+               print("No items found.")
+               return {"part_details": "No SKU found","compatible_cars":""}
+
+            detailed_items = [{"sku": item[0], "piece_name": item[1], "oem": item[2], "part_name": item[3], "position": item[4], "similarity": item[5]} for item in items]
+
+            
+            cur.execute(query_q2, (detailed_items[0]["sku"],))
+            additional_items = cur.fetchall()
+
+            additional_details = [{"brand": item[0], "model": item[1], "year": str(int(item[2]))} for item in additional_items]
+
+         response = {
             "parts_details": detailed_items,
-            "compatible_cars": additional_details
-        }
-        return response if response['parts_details'] or response['compatible_cars'] else {"message": "No items found."}
-    except psycopg2.Error as e:
-        return {"error": f"Database error: {e}"}
+            "compatible_cars": additional_details,
+         }
+
+         print(response)
+         return response
+   except psycopg2.Error as e:
+      print(f"Database error: {e}")
+      return {"error": f"Database error: {e}"}
