@@ -32,7 +32,6 @@ def car_part_sku_similar(piece_name, car_brand, car_model, car_year):
     column_names = "dai, application"
     table_name = "vehicle_parts"
 
-    # Single query fetching all items sorted by similarity
     query = (f"""SELECT DISTINCT {column_names}, similarity(application, '{piece_name}') as smu 
                   FROM {table_name} 
                   WHERE brand_idf ILIKE '{car_brand}' 
@@ -52,7 +51,7 @@ def car_part_sku_similar(piece_name, car_brand, car_model, car_year):
                 result = {"accuracy":"high","skus":[{"sku": item[0], "piece_name": item[1], "similarity": item[2]} for item in items if item[2] >= 0.3]}
 
                 if not result["skus"]:
-                    # If no items meet the threshold, take the top 2 regardless
+                    # If no items meet the threshold, take the top 2 if similarity >10%, if not return no matches
                     result = {"accuracy":"low","skus":[{"sku": item[0], "piece_name": item[1], "similarity": item[2]} for item in items if item[2] >= 0.1]}
 
                 if result["skus"]:
